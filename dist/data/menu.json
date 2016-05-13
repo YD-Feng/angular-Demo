@@ -1,0 +1,27 @@
+{
+    "code": 1,
+    "data": [
+        {
+            "id": 1,
+            "name": "考勤管理",
+            "href": "",
+            "target": "",
+            "parent_id": 0
+        },
+        {
+            "id": 2,
+            "name": "考勤信息统计",
+            "href": "#/platform/main",
+            "target": "",
+            "parent_id": 1
+        },
+        {
+            "id": 3,
+            "name": "加班信息统计",
+            "href": "#/platform/other",
+            "target": "",
+            "parent_id": 1
+        }
+    ],
+    "msg": "success"
+}

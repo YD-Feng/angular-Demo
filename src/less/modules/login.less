@@ -1,0 +1,129 @@
+@import (reference) "../tools/public";
+
+.login-bg{
+    height: 100%;
+    background:#411979 url('./../img/common/login-bg-1280.jpg') center repeat;
+}
+@media (max-width: 1280px) {
+    .login-bg{
+        background:#411979 url('./../img/common/login-bg-1280.jpg') center repeat;
+    }
+}
+@media (max-width: 1500px) and (min-width: 1281px) {
+    .login-bg{
+        background:#411979 url('./../img/common/login-bg-1500.jpg') center repeat;
+    }
+}
+@media (max-width: 2000px) and (min-width: 1501px) {
+    .login-bg{
+        background:#411979 url('./../img/common/login-bg-2000.jpg') center repeat;
+    }
+}
+
+.login-box{
+    width: 500px;
+    height: 340px;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px #cfcfcf;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -195px 0 0 -250px;
+    border-radius: 10px;
+    .title{
+        text-align: center;
+        line-height: 120px;
+        height: 120px;
+        font-weight: bold;
+        font-size: 32px;
+        color: #e2e2e2;
+    }
+    .form-warp{
+        width: 310px;
+        margin: 0 auto;
+        .form-item{
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 20px;
+        }
+        .txt-wrap{
+            position: absolute;
+            top: 0;
+            left: 1px;
+            height: 100%;
+            width: 60px;
+            line-height: 42px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            color: #000000;
+        }
+        .col-control{
+            width: 420px;
+            padding: 10px 0;
+        }
+        .ui-text-large{
+            width: 230px;
+            border: 1px solid #fff;
+            color: #000000;
+            background: #ffffff;
+            &::-webkit-input-placeholder{
+                color: #ababab;
+            }
+            &:focus::-webkit-input-placeholder{
+                color: transparent;
+            }
+        }
+    }
+    .btn-wrap{
+        width: 310px;
+        margin: 0 auto;
+        text-align: center;
+        .ui-btn{
+            width: 308px;
+            background:  transparent;
+            border: 1px solid #ffffff;
+            &:hover{
+                background:  #ffffff;
+                color: #444444;
+            }
+        }
+    }
+    .link-wrap{
+        width: 310px;
+        margin: 20px auto 0 auto;
+        text-align: center;
+        a{
+            color: @baseBlack;
+            &:hover{
+                color: @baseRed;
+            }
+        }
+    }
+}
+
+.login-tips-wrap{
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    margin-top: 180px;
+    transition: opacity 0.2s ease-in;
+    opacity: 1;
+    visibility: visible;
+    .login-tips{
+        display: inline-block;
+        padding: 10px 15px;
+        line-height: 22px;
+        font-size: 14px;
+        max-width: 300px;
+        color: #ffffff;
+        background-color: rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 15px #cfcfcf;
+        border-radius: 5px;
+    }
+}
+.hidden{
+    opacity: 0;
+    visibility: hidden;
+}

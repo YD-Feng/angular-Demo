@@ -1,0 +1,63 @@
+<div wrap-fit real-time>
+    <!-- 页头 -->
+    <div id="J-header" class="header">
+        <h1 class="title"><span class="text-red">NG</span>-DEMO</h1>
+
+        <ul class="top-nav">
+            <li class="item" title="退出" ng-click="logout()">
+                <i class="icon-font icon-font-exit">&#xe602;</i>
+            </li>
+            <li id="J-user-menu" class="item user-avatar">
+                <div class="img-wrap"><img src="./dist/img/demo/avatar-small.jpg"></div>
+                <span class="txt" id="J-user-name">{{userName}}</span>
+                <i class="icon-font icon-font-down">&#xe60a;</i>
+            </li>
+
+            <li class="item" title="任务">
+                <i class="icon-font icon-font-task">&#xe601;</i>
+                <span class="count">4</span>
+            </li>
+            <li class="item" title="信息">
+                <i class="icon-font icon-font-msg">&#xe600;</i>
+                <span class="count">6</span>
+            </li>
+            <li class="item" title="通知">
+                <i class="icon-font icon-font-notice">&#xe603;</i>
+                <span class="count">1</span>
+            </li>
+        </ul>
+    </div>
+
+    <div id="J-container" class="container">
+        <div id="J-sidebar" class="sidebar">
+            <ul id="J-s-menu-cls-one" class="s-menu-cls-one">
+                <li ng-repeat="item in menuList|menuFilter:identityCompetence:isSupperUser" set-i-scroll class="item-cls-one" ng-class="{active:$first}">
+
+                    <div class="J-item-cls-one-inner inner">
+                        {{item.name}}
+                        <i class="icon-font icon-font-arrow-left">&#xe60c;</i>
+                        <i class="icon-font icon-font-arrow-down">&#xe60a;</i>
+                        <span class="arrow"></span>
+                    </div>
+
+                    <ul class="J-s-menu-cls-two s-menu-cls-two" ng-if="item.submenu.length > 0" ng-style="{'display':$first?'block':'none'}">
+                        <li class="item-cls-two" ng-repeat="subMenuClsTwo in item.submenu|menuFilter:identityCompetence:isSupperUser">
+                            <a data-href="{{subMenuClsTwo.href}}">{{subMenuClsTwo.name}}</a>
+                        </li>
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+
+        <!-- 内容区 -->
+        <div id="J-container-body" class="container-body">
+            <div class="container-body-inner" ui-view></div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <div id="J-footer" class="footer">
+        2016 © Powered By <a href="mailTo:550284209@qq.com">Zhifeng.Cao</a>
+    </div>
+</div>

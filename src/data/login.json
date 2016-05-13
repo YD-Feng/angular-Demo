@@ -1,0 +1,9 @@
+{
+    "code": 1,
+    "data": {
+        "userName": "HELLO",
+        "isSupperUser": true,
+        "identityCompetence": "1,2,3"
+    },
+    "msg": ""
+}

@@ -1,0 +1,268 @@
+@import (reference) "../tools/public";
+
+.header{
+    width: 100%;
+    height: 46px;
+    background-color: @baseBlack;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    .title{
+        min-width: 230px;
+        height: 46px;
+        line-height: 46px;
+        margin-left: 15px;
+        float: left;
+        display: inline;
+        position: relative;
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 18px;
+        .text-red{
+            color: #d64635;
+        }
+    }
+    .top-nav{
+        min-width: 320px;
+        float: right;
+        height: 46px;
+        line-height: 46px;
+        font-size: 0;
+        color: @fontGray;
+        .item{
+            float: right;
+            height: 46px;
+            padding: 0 15px;
+            cursor: pointer;
+            position: relative;
+            &:hover{
+                background-color: #393939;
+                color: #fff;
+            }
+        }
+        .count{
+            min-width: 12px;
+            padding: 0 2px;
+            height: 16px;
+            line-height: 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            text-align: center;
+            position: absolute;
+            z-index: 2;
+            top: 6px;
+            left: 25px;
+            display: block;
+            background-color: @baseRed;
+            color: #fff;
+
+        }
+
+        .icon-font {
+            position: relative;
+            font-size: 20px;
+        }
+        .icon-font-msg {
+            top: 1px;
+        }
+        .icon-font-exit {
+            top: 1px;
+        }
+
+        .user-avatar{
+            position: relative;
+            padding: 0 30px 0 50px;
+        }
+        .img-wrap{
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 0;
+            border-radius: 50%;
+            box-shadow: 0 0 1px @fontGray;
+            overflow: hidden;
+        }
+        .icon-font-down{
+            position: absolute;
+            top: 16px;
+            right: 12px;
+            font-size: 14px;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .txt{
+            display: block;
+            font-size: 12px;
+            max-width: 80px;
+            .text-single-line-ellipsis(46px, 46px);
+        }
+    }
+
+    .top-nav-menu{
+        width: 100%;
+        li{
+            height: 35px;
+            line-height: 35px;
+            font-size: 14px;
+            text-align: right;
+        }
+        a{
+            display: block;
+            position: relative;
+            padding-left: 25px;
+            padding-right: 10px;
+            &:hover{
+                background-color: #f6f6f6;
+            }
+        }
+        .icon-font{
+            font-size: 16px;
+            position: absolute;
+            left: 10px;
+            top: 1px;
+        }
+    }
+}
+
+.container{
+    width: 100%;
+    margin: 0 auto;
+    padding: 46px 0 34px 0;
+    background: #fcfcfc url("../img/common/sidebar-bg.png") repeat-y -35px 0;
+    .sidebar{
+        width: 200px;
+        overflow: hidden;
+        position: absolute;
+        left: 0;
+        top: 46px;
+    }
+    .s-menu-cls-one{
+        padding: 5px 0;
+        .item-cls-one{
+            cursor: pointer;
+            .inner{
+                position: relative;
+                border-top: 1px solid #666;
+                border-bottom: 1px solid @baseBlack;
+                color: #b2b2b2;
+                padding: 0 30px 0 10px;
+                font-size: 14px;
+                .text-single-line-ellipsis(40px, 40px);
+                &:hover{
+                    background-color: #303030;
+                    color: #e2e2e2;
+                }
+            }
+            &.active{
+                .inner{
+                    background-color: @baseRed;
+                    color: #fff;
+                }
+                .icon-font-arrow-left{
+                    display: none;
+                }
+                .icon-font-arrow-down{
+                    display: block;
+                }
+                .arrow{
+                    display: block;
+                }
+            }
+        }
+        .icon-font{
+            position: absolute;
+            top: 12px;
+            left: 10px;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+        }
+        .icon-font-arrow-left, .icon-font-arrow-down{
+            left: auto;
+            right: 10px;
+        }
+        .icon-font-arrow-down{
+            display: none;
+        }
+        .arrow{
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 10px;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-color: transparent #fff transparent transparent;
+        }
+    }
+    .s-menu-cls-two{
+        display: none;
+        margin: 5px;
+        overflow: hidden;
+        .item-cls-two{
+            cursor: pointer;
+            border-top: 1px dashed #484848;
+            margin-top: -1px;
+            .text-single-line-ellipsis(35px, 35px);
+            a{
+                color: #b2b2b2;
+                background-color: #323232;
+                display: block;
+                padding: 0 15px 0 15px;
+                &:hover{
+                    background-color: #222222;
+                    color: #fff;
+                }
+            }
+            &.active{
+                a{
+                    background-color: #474747;
+                    color: #fff;
+                }
+            }
+        }
+        .icon-font{
+            position: static;
+            font-size: 12px;
+        }
+    }
+    .container-body{
+        margin-left: 200px;
+        height: 100%;
+        .container-body-inner{
+            height: 100%;
+        }
+        .iframe{
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+.footer{
+    width: 100%;
+    height: 34px;
+    line-height: 34px;
+    font-size: 12px;
+    color: #a3a3a3;
+    text-align: center;
+    background-color: @baseBlack;
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    left: 0;
+    a{
+        color: #5b9bd1;
+        &:hover{
+            color: #3175af;
+        }
+    }
+}
