@@ -13,7 +13,99 @@ var gulp = require('gulp'),
 
     argv = require('minimist')(process.argv.slice(2)),
     path = require('path'),
-    fs = require('fs');
+    fs = require('fs'),
+    crypto = require('crypto'),
+    runSequence = require('gulp-run-sequence'),
+    through = require('through2');
+
+//静态资源添加版本号插件
+function addAssetVer (options) {
+    var ASSET_REG = {
+            SCRIPT: /(<script[^>]+src=)['"]([^'"]+)["']/ig,
+            STYLESHEET: /(<link[^>]+href=)['"]([^'"]+)["']/ig,
+            IMAGE: /(<img[^>]+src=)['"]([^'"]+)["']/ig,
+            BACKGROUND: /(url\()(?!data:|about:)([^)]*)/ig
+        },
+        createHash = function (file, len) {
+            return crypto.createHash('md5').update(file).digest('hex').substr(0, len);
+        };
+
+    return through.obj(function (file, enc, cb) {
+
+        options = options || {};
+
+        if (file.isNull()) {
+            this.push(file);
+            return cb();
+        }
+
+        if (file.isStream()) {
+            this.emit('error', new gutil.PluginError('addAssetVer', 'Streaming not supported'));
+            return cb();
+        }
+
+        var content = file.contents.toString();
+
+        var filePath = path.dirname(file.path);
+
+        for (var type in ASSET_REG) {
+            if ( !(type === 'BACKGROUND' && !/\.(css|scss|less)$/.test(file.path)) ) {
+
+                content = content.replace(ASSET_REG[type], function (str, tag, src) {
+
+                    src = src.replace(/\?[\s\S]+$/, '').replace(/(^['"]|['"]$)/g, '');
+
+                    if (!/\.[^\.]+$/.test(src)) {
+                        return str;
+                    }
+
+                    if (options.verStr) {
+                        src += options.verStr;
+                        return tag + '"' + src + '"';
+                    }
+
+                    // remote resource
+                    if (/^https?:\/\//.test(src)) {
+                        return str;
+                    }
+
+                    var assetPath = null;
+
+                    if (type === 'IMAGE') {
+                        assetPath = path.join(typeof options.tplImgPathBase != 'undefined' ? options.tplImgPathBase : filePath, src);
+                    } else {
+                        assetPath = path.join(filePath, src);
+                    }
+
+                    if (src.indexOf('/') == 0) {
+                        if (options.resolvePath && typeof options.resolvePath === "function") {
+                            assetPath = options.resolvePath(src);
+                        } else {
+                            assetPath = (options.rootPath || "") + src;
+                        }
+                    }
+
+                    if (fs.existsSync(assetPath)) {
+
+                        var buf = fs.readFileSync(assetPath),
+                            md5 = createHash(buf, options.hashLen || 7),
+                            verStr = (options.verConnecter || '') + md5;
+
+                        src = src + '?v=' + verStr;
+                    } else {
+                        return str;
+                    }
+
+                    return tag + '"' + src + '"';
+                });
+            }
+        }
+
+        file.contents = new Buffer(content);
+        this.push(file);
+        cb();
+    });
+}
 
 //【内部调用函数】控制台错误处理
 function handleErrors () {
@@ -36,6 +128,8 @@ gulp.task('less', function () {
         .on("error", handleErrors)
         .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
         .on('error', handleErrors)
+        .pipe(gulp.dest('src/css'))
+        .pipe(addAssetVer())
         .pipe(minifycss())
         .pipe(gulp.dest('dist/css'));
 
@@ -43,9 +137,9 @@ gulp.task('less', function () {
 });
 
 /*
- * 任务：uglify 压缩 js
+ * 任务：压缩 js
  * */
-gulp.task('uglify', function () {
+gulp.task('js', function () {
     var stream = gulp.src('src/js/**/*.js')
         .pipe(uglify())
         .on("error", handleErrors)
@@ -55,13 +149,14 @@ gulp.task('uglify', function () {
 });
 
 /*
- * 任务：模版复制
+ * 任务：为模版引入的静态资源添加版本号
  * */
-gulp.task('copy:tpl', function () {
-    var stream = gulp.src(['src/view/**/*.html'])
-        .pipe(copy('dist', {
-            prefix : 1
-        }));
+gulp.task('tpl', function () {
+    var stream = gulp.src(['src/index.html', 'src/view/**/*.html'], { base: 'src' })
+        .pipe(addAssetVer({
+            tplImgPathBase: 'src'
+        }))
+        .pipe(gulp.dest('dist'));
 
     return stream;
 });
@@ -82,13 +177,13 @@ gulp.task('copy:other', function () {
  * 任务：dist 构建
  * */
 gulp.task('dist', function () {
-    gulp.start('uglify', 'less', 'copy:tpl', 'copy:other');
+    gulp.start('js', 'less', 'tpl', 'copy:other');
 });
 
 gulp.task('watch:js', function () {
     gulp.watch(['src/js/**/*.js'], function(event){
-        console.log('File ' + event.path + ' was ' + event.type + ', running uglify tasks...');
-        gulp.start('uglify');
+        console.log('File ' + event.path + ' was ' + event.type + ', running js tasks...');
+        gulp.start('js');
     });
 });
 
@@ -101,8 +196,8 @@ gulp.task('watch:less', function () {
 
 gulp.task('watch:tpl', function () {
     gulp.watch('src/view/**/*.html', function (event) {
-        console.log('File ' + event.path + ' was ' + event.type + ', copy:tpl less tasks...');
-        gulp.start('copy:tpl');
+        console.log('File ' + event.path + ' was ' + event.type + ', tpl less tasks...');
+        gulp.start('tpl');
     });
 });
 

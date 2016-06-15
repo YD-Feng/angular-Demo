@@ -14,8 +14,7 @@ app.config(['$ocLazyLoadProvider', function ($ocLazyLoadProvider) {
 app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', function ($stateProvider, $urlRouterProvider, $controllerProvider) {
     /**
      * 路由切换时调用
-     * @param param.file 懒加载文件数组
-     * @param tpl 子模块view视图
+     * @param param.files 懒加载文件数组
      * @param module 子模块名
      */
     function resovleDep (param, module) {
@@ -23,7 +22,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', funct
             loadStaticRes: ['$ocLazyLoad', function ($ocLazyLoad) {
                 return $ocLazyLoad.load({
                     name: module,
-                    cache: false,
+                    cache: true,
                     files: param.files
                 });
             }]
@@ -36,34 +35,34 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', funct
     $stateProvider
         .state('login', {
             url: '/login',
-            templateUrl: 'dist/view/login.html',
+            templateUrl: 'view/login.html',
             controller: 'loginCtrl',
             resolve: resovleDep({
-                files: ['dist/js/controllers/login', 'dist/js/services/xhr']
+                files: ['js/controllers/login.js?v=123423423', 'js/services/xhr']
             }, 'app.login')
         })
         .state('platform', {
             url: '/platform',
-            templateUrl: 'dist/view/wrap.html',
+            templateUrl: 'view/wrap.html',
             controller: 'wrapCtrl',
             resolve: resovleDep({
-                files: ['dist/js/controllers/wrap', 'dist/js/services/xhr', 'dist/js/directives/wrap', 'dist/js/filters/wrap']
+                files: ['js/controllers/wrap', 'js/services/xhr', 'js/directives/wrap', 'js/filters/wrap']
             }, 'app.platform')
         })
         .state('platform.main', {
             url: '/main',
-            templateUrl: 'dist/view/main.html',
+            templateUrl: 'view/main.html',
             controller: 'mainCtrl',
             resolve: resovleDep({
-                files: ['dist/js/controllers/main', 'dist/js/services/xhr']
+                files: ['js/controllers/main', 'js/services/xhr']
             }, 'app.platform.main')
         })
         .state('platform.other', {
             url: '/other',
-            templateUrl: 'dist/view/other.html',
+            templateUrl: 'view/other.html',
             controller: 'otherCtrl',
             resolve: resovleDep({
-                files: ['dist/js/controllers/other', 'dist/js/services/xhr']
+                files: ['js/controllers/other', 'js/services/xhr']
             }, 'app.platform.other')
         });
 

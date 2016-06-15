@@ -20,7 +20,7 @@ app.controller('loginCtrl', ['$scope', '$location', '$timeout', 'xhr', function 
 
         xhr.ajax({
             method: 'GET',
-            url: 'dist/data/login.json',
+            url: 'data/login.json',
             data: {
                 userName: $scope.userName,
                 password: $scope.password

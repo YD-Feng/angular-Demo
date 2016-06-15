@@ -13,7 +13,7 @@ app.controller('wrapCtrl', ['$scope', '$location', 'xhr', function ($scope, $loc
 
     xhr.ajax({
         method: 'GET',
-        url: 'dist/data/login.json'
+        url: 'data/login.json'
     }).success(function (re) {
         if (re.code == 1) {
             $scope.userName = re.data.userName;
@@ -22,7 +22,7 @@ app.controller('wrapCtrl', ['$scope', '$location', 'xhr', function ($scope, $loc
 
             xhr.ajax({
                 method: 'GET',
-                url: 'dist/data/menu.json'
+                url: 'data/menu.json'
             }).success(function (re) {
                 if (re.code == 1) {
                     $scope.menuList = processData(re.data);
