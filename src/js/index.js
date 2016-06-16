@@ -1,5 +1,36 @@
 var app = angular.module('app', ['ui.router', 'oc.lazyLoad']),
-    xhrPool = {};//请求池
+    xhrPool = {},//异步请求池
+    routerConfigs = [
+        {
+            state: 'login',
+            url: '/login',
+            templateUrl: 'view/login.html',
+            controller: 'loginCtrl',
+            files: ['js/controllers/login', 'js/services/xhr']
+        },
+        {
+            state: 'platform',
+            url: '/platform',
+            templateUrl: 'view/wrap.html',
+            controller: 'wrapCtrl',
+            files: ['js/controllers/wrap', 'js/services/xhr', 'js/directives/wrap', 'js/filters/wrap']
+        },
+        {
+            state: 'platform.main',
+            url: '/main',
+            templateUrl: 'view/main.html',
+            controller: 'mainCtrl',
+            files: ['js/controllers/main', 'js/services/xhr']
+        },
+        {
+            state: 'platform.other',
+            url: '/other',
+            templateUrl: 'view/other.html',
+            controller: 'otherCtrl',
+            files: ['js/controllers/other', 'js/services/xhr']
+        }
+    ],
+    VERSION = '{@version@}';
 
 //配置期
 app.config(['$ocLazyLoadProvider', function ($ocLazyLoadProvider) {
@@ -31,15 +62,34 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', funct
         return resolves;
     }
 
+    for (var i = 0, configLen = routerConfigs.length; i < configLen; i++) {
+        var config = routerConfigs[i],
+            files = [];
+
+        for (var j = 0, filesLen = config.files.length; j < filesLen; j++) {
+            var file = config.files[j];
+            files.push(file + '.js?v=' + VERSION);
+        }
+
+        $stateProvider
+            .state(config.state, {
+                url: config.url,
+                templateUrl: config.templateUrl,
+                controller: config.controller,
+                resolve: resovleDep({
+                    files: files
+                })
+            });
+    }
     //路由配置
-    $stateProvider
+    /*$stateProvider
         .state('login', {
             url: '/login',
             templateUrl: 'view/login.html',
             controller: 'loginCtrl',
             resolve: resovleDep({
-                files: ['js/controllers/login.js?v=123423423', 'js/services/xhr']
-            }, 'app.login')
+                files: ['js/controllers/login', 'js/services/xhr']
+            })
         })
         .state('platform', {
             url: '/platform',
@@ -47,7 +97,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', funct
             controller: 'wrapCtrl',
             resolve: resovleDep({
                 files: ['js/controllers/wrap', 'js/services/xhr', 'js/directives/wrap', 'js/filters/wrap']
-            }, 'app.platform')
+            })
         })
         .state('platform.main', {
             url: '/main',
@@ -55,7 +105,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', funct
             controller: 'mainCtrl',
             resolve: resovleDep({
                 files: ['js/controllers/main', 'js/services/xhr']
-            }, 'app.platform.main')
+            })
         })
         .state('platform.other', {
             url: '/other',
@@ -63,8 +113,8 @@ app.config(['$stateProvider', '$urlRouterProvider', '$controllerProvider', funct
             controller: 'otherCtrl',
             resolve: resovleDep({
                 files: ['js/controllers/other', 'js/services/xhr']
-            }, 'app.platform.other')
-        });
+            })
+        });*/
 
     $urlRouterProvider.otherwise('/login');
 }]);

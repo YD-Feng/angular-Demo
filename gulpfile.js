@@ -8,6 +8,9 @@ var gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     minifycss = require('gulp-minify-css'),
 
+    gulpIf = require('gulp-if'),
+    replace = require('gulp-replace'),
+
     util = require('gulp-util'),
     notify = require('gulp-notify'),
 
@@ -139,8 +142,14 @@ gulp.task('less', function () {
 /*
  * 任务：压缩 js
  * */
-gulp.task('js', function () {
+gulp.task('script', function () {
     var stream = gulp.src('src/js/**/*.js')
+        .pipe(gulpIf(function (file) {
+            if (path.basename(file.path) == 'index.js') {
+                return true;
+            }
+            return false;
+        }, replace(/\{@version@\}/g, new Date().valueOf())))
         .pipe(uglify())
         .on("error", handleErrors)
         .pipe(gulp.dest('dist/js'));
@@ -177,13 +186,13 @@ gulp.task('copy:other', function () {
  * 任务：dist 构建
  * */
 gulp.task('dist', function () {
-    gulp.start('js', 'less', 'tpl', 'copy:other');
+    gulp.start('script', 'less', 'tpl', 'copy:other');
 });
 
-gulp.task('watch:js', function () {
+gulp.task('watch:script', function () {
     gulp.watch(['src/js/**/*.js'], function(event){
-        console.log('File ' + event.path + ' was ' + event.type + ', running js tasks...');
-        gulp.start('js');
+        console.log('File ' + event.path + ' was ' + event.type + ', running script tasks...');
+        gulp.start('script');
     });
 });
 
@@ -202,7 +211,7 @@ gulp.task('watch:tpl', function () {
 });
 
 gulp.task('watch', function () {
-    gulp.start('watch:js', 'watch:less', 'watch:tpl');
+    gulp.start('watch:script', 'watch:less', 'watch:tpl');
 });
 
 /*
