@@ -18,7 +18,7 @@ var gulp = require('gulp'),
     path = require('path'),
     fs = require('fs'),
     crypto = require('crypto'),
-    runSequence = require('gulp-run-sequence'),
+    sequence = require('gulp-sequence'),
     through = require('through2');
 
 //静态资源添加版本号插件
